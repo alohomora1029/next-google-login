@@ -1,6 +1,25 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import "../styles/globals.css";
+import type { AppProps } from "next/app";
+import { RecoilRoot } from "recoil";
+import { useAuth } from "../lib/auth";
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+type Props = {
+  children: JSX.Element;
+};
+
+const Auth = ({ children }: Props): JSX.Element => {
+  const isLoading = useAuth();
+
+  return isLoading ? <p>Loading...</p> : children;
+};
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <RecoilRoot>
+      <Auth>
+        <Component {...pageProps} />
+      </Auth>
+    </RecoilRoot>
+  );
 }
+export default MyApp;
